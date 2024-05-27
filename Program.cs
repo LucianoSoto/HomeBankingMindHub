@@ -13,15 +13,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
 
-   //Aqui obtenemos todos los services registrados en la App
+    //Aqui obtenemos todos los services registrados en la App
     var services = scope.ServiceProvider;
     try
     {
 
-       // En este paso buscamos un service que este con la clase HomeBankingContext
+        // En este paso buscamos un service que este con la clase HomeBankingContext
         var context = services.GetRequiredService<HomeBankingContext>();
         DBInitializer.Initialize(context);
-        DBInitializer.Add(context, "Rodrigo", "Salazar", "Rodri@hotmail.com", "12221");
     }
     catch (Exception ex)
     {

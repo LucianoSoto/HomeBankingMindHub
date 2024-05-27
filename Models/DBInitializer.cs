@@ -1,4 +1,4 @@
-﻿using HomeBankingMindHub.Models;
+﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace HomeBankingMindHub.Models
 {
@@ -15,6 +15,21 @@ namespace HomeBankingMindHub.Models
                 };
 
                 context.Clients.AddRange(clients);
+
+                context.SaveChanges();
+            }
+        }
+
+        public static void Add(HomeBankingContext context, string Name, string LastName, string Email, string Password)
+        {
+            if (context.Clients.Count() >= 1)
+            {
+                var client = new Client[]
+                {
+                    new Client { Email = Email, FirstName= Name , LastName=LastName, Password=Password}
+                };
+
+                context.Clients.AddRange(client);
 
                 context.SaveChanges();
             }

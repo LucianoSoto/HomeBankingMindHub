@@ -1,4 +1,5 @@
-﻿namespace HomeBankingMindHub.Models
+﻿using System.Collections.Generic;
+namespace HomeBankingMindHub.Models
 {
     public class Client
     {

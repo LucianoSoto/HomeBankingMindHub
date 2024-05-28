@@ -1,4 +1,5 @@
-﻿using HomeBankingMindHub.Models;
+﻿using Clase_1.Models;
+using HomeBankingMindHub.Models;
 
 namespace HomeBankingMindHub.Models
 {
@@ -6,6 +7,7 @@ namespace HomeBankingMindHub.Models
     {
         public static void Initialize(HomeBankingContext context)
         {
+            //Verifica si la tabla esta vacia
             if (!context.Clients.Any())
             {
                 var clients = new Client[]
@@ -17,6 +19,27 @@ namespace HomeBankingMindHub.Models
                 context.Clients.AddRange(clients);
 
                 context.SaveChanges();
+            }
+
+            if (!context.Accounts.Any())
+            {
+                Client victorClient = context.Clients.FirstOrDefault(c => c.Email == "vcoronado@gmail.com");
+                Client luchoClient = context.Clients.FirstOrDefault(c => c.Email == "lusoto@gmail.com");
+                {
+                    if (victorClient != null && luchoClient != null) 
+                    {
+                        var vicAccounts = new Account[]
+                        {
+                            new Account{Number="VIN001", CreationDate=DateTime.Now, Balance=100, ClientId = victorClient.Id},
+                            new Account{Number="VIN002", CreationDate=DateTime.Now, Balance=200, ClientId = luchoClient.Id}
+                        };
+
+                    context.Accounts.AddRange(vicAccounts);
+                    context.SaveChanges();
+                    }
+
+                    
+                }
             }
         }
     }

@@ -41,6 +41,24 @@ namespace HomeBankingMindHub.Models
                     
                 }
             }
+
+            if(!context.Transactions.Any())
+            {
+                var account1 = context.Accounts.FirstOrDefault(c => c.Number == "VIN001");
+                
+                if(account1 != null)
+                {
+                    var transactions = new Transaction[] {
+                        new Transaction { AccountId= account1.Id, Amount = 10000, Date= DateTime.Now.AddHours(-5), Description = "Recibo de Sueldo Enero", Type = TransactionType.CREDIT },
+                        new Transaction { AccountId= account1.Id, Amount = 2000, Date= DateTime.Now.AddHours(-3), Description = "Venta de Insumos para el hogar", Type = TransactionType.CREDIT },
+                        new Transaction { AccountId= account1.Id, Amount = 500, Date= DateTime.Now.AddHours(-1), Description = "Compra de almacen", Type = TransactionType.DEBIT }
+                    };
+
+                    context.Transactions.AddRange(transactions);
+                    context.SaveChanges();
+                }
+
+            }
         }
     }
 }

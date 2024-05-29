@@ -1,4 +1,6 @@
-﻿using HomeBankingMindHub.Models;
+﻿using Clase_1.DTOS;
+using Clase_1.Models;
+using HomeBankingMindHub.Models;
 
 namespace Clase_1.Models
 {
@@ -15,6 +17,8 @@ namespace Clase_1.Models
         public Client Client { get; set; }
 
         public long ClientId { get; set; }
+
+        public ICollection<Transaction> Transactions { get; set; }
 
     }
 }

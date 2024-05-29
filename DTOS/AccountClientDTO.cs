@@ -1,10 +1,8 @@
 ﻿using Clase_1.Models;
-using Clase_1.DTOS;
-using HomeBankingMindHub.Models;
 
 namespace Clase_1.DTOS
 {
-    public class AccountDTO
+    public class AccountClientDTO
     {
         public long Id { get; set; }
 
@@ -14,15 +12,12 @@ namespace Clase_1.DTOS
 
         public double Balance { get; set; }
 
-        public ICollection<TransactionDTO> Transactions { get; set; }
-
-        public AccountDTO(Account account) 
+        public AccountClientDTO(Account account)
         {
             Id = account.Id;
             Number = account.Number;
             CreationDate = account.CreationDate;
             Balance = account.Balance;
-            Transactions = account.Transactions.Select(a => new TransactionDTO(a)).ToList();
         }
     }
 }

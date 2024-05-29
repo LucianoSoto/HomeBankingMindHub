@@ -10,12 +10,12 @@ namespace HomeBankingMindHub.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientsController : ControllerBase
     {
         private readonly IClientRepository _clientRepository;
 
         //ctor es un atajo para crear controladores
-        public ClientController(IClientRepository clientRepository)
+        public ClientsController(IClientRepository clientRepository)
         {
             _clientRepository = clientRepository;
         }

@@ -12,6 +12,7 @@ namespace Clase_1.DTOS
         public string Email { get; set; }
 
         public ICollection<AccountClientDTO> Accounts { get; set; }
+        public ICollection<ClientLoanDTO> Loans { get; set; }
 
         public ClientDTO(Client client)
         {
@@ -19,7 +20,8 @@ namespace Clase_1.DTOS
             FirstName = client.FirstName;
             LastName = client.LastName;
             Email = client.Email;
-            Accounts = client.Accounts.Select(a => new AccountClientDTO(a)).ToList();
+            Accounts = client.Accounts.Select(account => new AccountClientDTO(account)).ToList();
+            Loans = client.Loans.Select(loan => new ClientLoanDTO(loan)).ToList();
         }
     }
 }

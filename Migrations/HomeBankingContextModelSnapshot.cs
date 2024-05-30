@@ -49,6 +49,57 @@ namespace Clase_1.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("Clase_1.Models.ClientLoan", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<long>("ClientId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LoanId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Payments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("LoanId");
+
+                    b.ToTable("ClientLoans");
+                });
+
+            modelBuilder.Entity("Clase_1.Models.Loan", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("MaxAmount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Payments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Loans");
+                });
+
             modelBuilder.Entity("Clase_1.Models.Transaction", b =>
                 {
                     b.Property<long>("Id")
@@ -115,6 +166,25 @@ namespace Clase_1.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("Clase_1.Models.ClientLoan", b =>
+                {
+                    b.HasOne("HomeBankingMindHub.Models.Client", "Client")
+                        .WithMany("ClientLoans")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clase_1.Models.Loan", "Loan")
+                        .WithMany("ClientLoans")
+                        .HasForeignKey("LoanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Loan");
+                });
+
             modelBuilder.Entity("Clase_1.Models.Transaction", b =>
                 {
                     b.HasOne("Clase_1.Models.Account", "Account")
@@ -131,9 +201,16 @@ namespace Clase_1.Migrations
                     b.Navigation("Transactions");
                 });
 
+            modelBuilder.Entity("Clase_1.Models.Loan", b =>
+                {
+                    b.Navigation("ClientLoans");
+                });
+
             modelBuilder.Entity("HomeBankingMindHub.Models.Client", b =>
                 {
                     b.Navigation("Accounts");
+
+                    b.Navigation("ClientLoans");
                 });
 #pragma warning restore 612, 618
         }

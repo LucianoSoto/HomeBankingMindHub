@@ -1,4 +1,5 @@
-﻿using Clase_1.Models;
+﻿using Clase_1.DTOS;
+using Clase_1.Models;
 
 namespace HomeBankingMindHub.Models
 {
@@ -11,6 +12,8 @@ namespace HomeBankingMindHub.Models
         public string Password { get; set; }
 
         public ICollection<Account> Accounts { get; set; }
+        public ICollection<ClientLoan> Loans { get; set; }
+
 
     }
 }

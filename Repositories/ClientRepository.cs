@@ -14,7 +14,8 @@ namespace Clase_1.Repositories
             return FindByCondition(client => client.Id == id)
                 .Include(client => client.Accounts)
                 .Include(client => client.Loans)
-                .ThenInclude(cl => cl.Loan)
+                    .ThenInclude(cl => cl.Loan)
+                .Include(client => client.Cards)
                 .FirstOrDefault();
         }
 
@@ -23,7 +24,8 @@ namespace Clase_1.Repositories
             return FindAll()
                 .Include(client => client.Accounts)
                 .Include(client => client.Loans)
-                .ThenInclude(cl => cl.Loan)
+                    .ThenInclude(cl => cl.Loan)
+                .Include(client => client.Cards)
                 .ToList();
         }
 

@@ -13,6 +13,7 @@ namespace HomeBankingMindHub.Models
 
         public ICollection<Account> Accounts { get; set; }
         public ICollection<ClientLoan> Loans { get; set; }
+        public ICollection<Card> Cards { get; set; }
 
 
     }

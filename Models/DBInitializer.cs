@@ -1,5 +1,6 @@
 ﻿using Clase_1.Models;
 using HomeBankingMindHub.Models;
+using NuGet.Packaging;
 
 namespace HomeBankingMindHub.Models
 {
@@ -7,7 +8,6 @@ namespace HomeBankingMindHub.Models
     {
         public static void Initialize(HomeBankingContext context)
         {
-            //Verifica si la tabla esta vacia
             if (!context.Clients.Any())
             {
                 var clients = new Client[]
@@ -97,9 +97,44 @@ namespace HomeBankingMindHub.Models
                     context.ClientLoans.Add(clientLoan3);
                 }
 
-                context.SaveChanges();
-                
-                
+                context.SaveChanges();   
+            }
+
+            if (!context.Cards.Any())
+            {
+                var client1 = context.Clients.FirstOrDefault(c => c.Email == "vcoronado@gmail.com");
+
+                if (client1 != null)
+                {
+                    var cards = new Card[]
+                    {
+                        new Card
+                        {
+                            ClientId = client1.Id,
+                            CardHolder = client1.FirstName + " " + client1.LastName,
+                            Type = CardType.DEBIT.ToString(),
+                            Color = CardColor.GOLD.ToString(),
+                            Number = "3325-6745-7876-4445",
+                            Cvv = 990,
+                            FromDate = DateTime.Now,
+                            ThruDate = DateTime.Now.AddYears(4),
+                        },
+                        new Card
+                        {
+                            ClientId = client1.Id,
+                            CardHolder = client1.FirstName + " " + client1.LastName,
+                            Type = CardType.CREDIT.ToString(),
+                            Color = CardColor.TITANIUM.ToString(),
+                            Number = "2234-6745-552-7888",
+                            Cvv = 750,
+                            FromDate = DateTime.Now,
+                            ThruDate = DateTime.Now.AddYears(5),
+                        }
+                    };
+
+                    context.Cards.AddRange(cards);
+                    context.SaveChanges();
+                }
             }
         }
     }

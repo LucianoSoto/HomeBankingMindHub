@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "http": {
+    "HomeBankingMindHub": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

@@ -9,5 +9,7 @@ namespace Clase_1.Repositories
         void Save (Client client);
 
         Client GetClientById(long id);
+
+        Client GetClientByEmail(string email);
     }
 }

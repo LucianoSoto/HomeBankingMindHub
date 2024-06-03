@@ -34,6 +34,17 @@ namespace Clase_1.Repositories
             Create(client);
             SaveChanges();
         }
+        
+        public Client GetClientByEmail(string email)
+        {
+            return FindByCondition(client => client.Email.ToUpper() == email.ToUpper())
+                    .Include(client => client.Accounts)
+                    .Include(client => client.Loans)
+                        .ThenInclude(cl => cl.Loan)
+                    .Include(client => client.Cards)
+                    .FirstOrDefault();
+        }
+        
     }
 }
 

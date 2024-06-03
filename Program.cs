@@ -1,10 +1,13 @@
 using Clase_1.Repositories;
 using HomeBankingMindHub.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -14,6 +17,18 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IClientLoanRepository, ClientLoanRepository>();
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+      {
+          options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+          options.LoginPath = new PathString("/index.html");
+      });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));   
+});
 
 var app = builder.Build();
 
@@ -41,7 +56,19 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+app.UseDefaultFiles();
+
 app.UseStaticFiles();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 
 app.UseRouting();
 

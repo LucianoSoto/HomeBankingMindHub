@@ -25,5 +25,11 @@ namespace Clase_1.DTOS
             Loans = client.Loans.Select(loan => new ClientLoanDTO(loan)).ToList();
             Cards = client.Cards.Select(card => new CardDTO(card)).ToList();
         }
+        public ClientDTO(ClientUserDTO client)
+        {
+            FirstName = client.FirstName;
+            LastName = client.LastName;
+            Email = client.Email;
+        }
     }
 }

@@ -103,19 +103,19 @@ namespace HomeBankingMindHub.Controllers
 
         [HttpPost]
 
-        public IActionResult Post([FromBody] Client client)
+        public IActionResult Post([FromBody] ClientUserDTO clientUserDTO)
         {
             try
             {
-                if (String.IsNullOrEmpty(client.Email) ||
-                   String.IsNullOrEmpty(client.Password) ||
-                   String.IsNullOrEmpty(client.FirstName) ||
-                   String.IsNullOrEmpty(client.LastName))
+                if (String.IsNullOrEmpty(clientUserDTO.Email) ||
+                   String.IsNullOrEmpty(clientUserDTO.Password) ||
+                   String.IsNullOrEmpty(clientUserDTO.FirstName) ||
+                   String.IsNullOrEmpty(clientUserDTO.LastName))
                 {
                     return StatusCode(403, "Oops! Datos Invalidos!");
                 }
 
-                Client user = _clientRepository.GetClientByEmail(client.Email);
+                Client user = _clientRepository.GetClientByEmail(clientUserDTO.Email);
 
                 if (user != null)
                 {
@@ -124,10 +124,10 @@ namespace HomeBankingMindHub.Controllers
 
                 Client newClient = new Client
                 {
-                    Email = client.Email,
-                    Password = client.Password,
-                    FirstName = client.FirstName,
-                    LastName = client.LastName,
+                    Email = clientUserDTO.Email,
+                    Password = clientUserDTO.Password,
+                    FirstName = clientUserDTO.FirstName,
+                    LastName = clientUserDTO.LastName,
                 };
 
                 _clientRepository.Save(newClient);

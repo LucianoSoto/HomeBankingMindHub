@@ -46,7 +46,7 @@ namespace Clase_1.Controllers
                     claims.Add(new Claim("Admin", "true"));
            
                 }
-
+                
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));

@@ -1,6 +1,7 @@
 ﻿using Clase_1.DTOS;
 using Clase_1.Repositories;
 using HomeBankingMindHub.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -31,6 +32,7 @@ namespace HomeBankingMindHub.Controllers
         }*/
 
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
 
         public IActionResult GetAllClients()
         {
@@ -69,6 +71,7 @@ namespace HomeBankingMindHub.Controllers
         }
         
         [HttpGet("current")]
+        [Authorize(Policy = "ClientOnly")]
 
         public IActionResult GetCurrent()
         {

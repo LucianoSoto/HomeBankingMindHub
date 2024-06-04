@@ -1,11 +1,8 @@
-﻿using HomeBankingMindHub.Models;
-
-namespace Clase_1.DTOS
+﻿namespace Clase_1.DTOS
 {
-    public class ClientUserDTO
+    public class LoginDTO
     {
         public string Email { get; set; }
         public string Password { get; set; }
-
     }
 }

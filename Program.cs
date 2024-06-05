@@ -21,7 +21,7 @@ builder.Services.AddScoped<IClientLoanRepository, ClientLoanRepository>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
       {
-          options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+          options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
           options.LoginPath = new PathString("/index.html");
       });
 

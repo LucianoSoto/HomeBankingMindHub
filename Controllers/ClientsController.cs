@@ -1,4 +1,5 @@
 ﻿using Clase_1.DTOS;
+using Clase_1.Models;
 using Clase_1.Repositories;
 using HomeBankingMindHub.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -15,11 +18,13 @@ namespace HomeBankingMindHub.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IAccountRepository _accountRepository;
 
         //ctor es un atajo para crear controladores
-        public ClientsController(IClientRepository clientRepository)
+        public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository)
         {
             _clientRepository = clientRepository;
+            _accountRepository = accountRepository;
         }
 
         /*Configura el controlador para que pueda hacer una peticion GET cuando se acceda a la ruta(api/client en este caso)
@@ -75,6 +80,7 @@ namespace HomeBankingMindHub.Controllers
 
         public IActionResult GetCurrent()
         {
+            //Pasar a Service
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
@@ -100,6 +106,62 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        /*
+        [HttpPost("current/accounts")]
+        [Authorize(Policy = "ClientOnly")]
+
+        public IActionResult CreateAccount([FromBody] AccountDTO AccountDTO)
+        {
+            string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+
+            if (email == string.Empty)
+            {
+                return Forbid();
+            }
+
+            Client client = _clientRepository.GetClientByEmail(email);
+
+            if (client == null)
+            {
+                return Forbid();
+            }
+
+            var userAccounts = _accountRepository.GetAccountsByClient(client.Id);//Crear GetAccountByNumber
+
+            if (userAccounts.Count() >= 3)
+            {
+                return StatusCode(403, "No pueden haber mas de 3 cuentas por cliente");
+            }
+
+            string codeAccount = "";
+            int flag = 0;
+
+            do
+            {
+                codeAccount = "VIN" + RandomNumberGenerator.GetInt32(0, 99999999);
+                Account account = _accountRepository.GetAccountByNumber(codeAccount);
+                if (account == null)
+                {
+                    flag = 1;
+                }
+            } while (flag == 0);
+            }
+
+
+
+            Account newAccount = new Account
+            {
+                Number = codeAccount,
+                CreationDate = DateTime.Now,
+                Balance = 0,
+                ClientId = client.Id
+            };
+            
+        }
+        */
+
+
 
         [HttpPost]
 
@@ -138,5 +200,6 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);}
             }
         }
+        
     }
 

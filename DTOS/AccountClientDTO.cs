@@ -18,6 +18,6 @@ namespace Clase_1.DTOS
             Number = account.Number;
             CreationDate = account.CreationDate;
             Balance = account.Balance;
-        }
+        } 
     }
 }

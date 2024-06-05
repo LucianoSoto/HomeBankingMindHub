@@ -267,7 +267,53 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        
+
+        [HttpGet("current/accounts")]
+
+        public IActionResult GetCurrentAccounts()
+        {
+            string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+
+            if (email == string.Empty)
+            {
+                return Forbid();
+            }
+
+            Client client = _clientRepository.GetClientByEmail(email);
+
+            if (client == null)
+            {
+                return Forbid();
+            }
+
+            var clientAccounts = _accountRepository.GetAccountsByClient(client.Id);
+            var accountsDTO = clientAccounts.Select(accounts => new AccountDTO(accounts)).ToList();
+            return Ok(accountsDTO);
+        }
+
+        [HttpGet("current/cards")]
+
+        public IActionResult GetCurrentCards()
+        {
+            string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+
+            if (email == string.Empty)
+            {
+                return Forbid();
+            }
+
+            Client client = _clientRepository.GetClientByEmail(email);
+
+            if (client == null)
+            {
+                return Forbid();
+            }
+
+            var clientCards = _cardRepository.GetCardsByClient(client.Id);
+            var cardsDTO = clientCards.Select(cards => new CardDTO(cards)).ToList();
+            return Ok(cardsDTO);
+        }
+
 
         [HttpPost]
 

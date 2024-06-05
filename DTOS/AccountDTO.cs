@@ -24,5 +24,6 @@ namespace Clase_1.DTOS
             Balance = account.Balance;
             Transactions = account.Transactions.Select(transaction => new TransactionDTO(transaction)).ToList();
         }
+
     }
 }

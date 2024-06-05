@@ -26,7 +26,7 @@ namespace Clase_1.Controllers
         
         [HttpPost("login")]
 
-        public async Task<IActionResult> Login([FromBody] Client client)
+        public async Task<IActionResult> Login([FromBody] ClientUserDTO client)
         {
             try
             {
@@ -39,9 +39,14 @@ namespace Clase_1.Controllers
 
                 var claims = new List<Claim>
                 {
-                    new Claim("Client", user.Email),
+                    new Claim("Client", user.Email)
                 };
-
+                if (client.Email.Equals("lusoto@gmail.com"))
+                {
+                    claims.Add(new Claim("Admin", "true"));
+           
+                }
+                
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));

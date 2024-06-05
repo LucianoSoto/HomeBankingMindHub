@@ -10,5 +10,8 @@ namespace Clase_1.Repositories
         void Save(Account account);
 
         Account GetAccountById(long id);
+
+        IEnumerable<Account> GetAccountsByClient(long clientId);
+        Account GetAccountByNumber(string Number);
     }
 }

@@ -19,6 +19,49 @@ namespace Clase_1.Repositories
             return FindByCondition(card => card.Id == id)
                 .FirstOrDefault();
         }
+        public Card GetCardByNumber(string Number)
+        {
+            return FindByCondition(card => card.Number == Number)
+                .FirstOrDefault();
+        }
+
+        public IEnumerable<Card> GetCardsByClient(long clientId)
+        {
+            return FindByCondition(card => card.ClientId == clientId)
+                .ToList();
+        }
+        
+        public IEnumerable<Card> GetDebitCards(long clientId)
+        {
+            var cards = GetCardsByClient(clientId);
+            var debitCards = new List<Card>();
+
+            foreach (var item in cards)
+            {
+                if(item.Type == "DEBIT")
+                {
+                    debitCards.Add(item);
+                }
+            }
+
+            return debitCards;
+        }
+
+        public IEnumerable<Card> GetCreditCards(long clientId)
+        {
+            var cards = GetCardsByClient(clientId);
+            var creditCards = new List<Card>();
+
+            foreach (var item in cards)
+            {
+                if (item.Type == "CREDIT")
+                {
+                    creditCards.Add(item);
+                }
+            }
+
+            return creditCards;
+        }
 
         public void Save(Card card)
         {

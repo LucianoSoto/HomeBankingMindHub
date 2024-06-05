@@ -9,5 +9,9 @@ namespace Clase_1.Repositories
         void Save(Card card);
 
         Card GetCardById(long id);
+        Card GetCardByNumber(string id); 
+        IEnumerable<Card> GetCardsByClient(long clientId);
+        IEnumerable<Card> GetCreditCards(long clientId);
+        IEnumerable<Card> GetDebitCards(long clientId);
     }
 }

@@ -27,8 +27,6 @@ namespace Clase_1.DTOS
         }
         public ClientDTO(ClientUserDTO client)
         {
-            FirstName = client.FirstName;
-            LastName = client.LastName;
             Email = client.Email;
         }
     }

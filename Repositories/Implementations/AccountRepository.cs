@@ -2,9 +2,9 @@
 using HomeBankingMindHub.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Clase_1.Repositories
+namespace Clase_1.Repositories.Implementations
 {
-    public class AccountRepository : RepositoryBase<Account>,IAccountRepository
+    public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
 
         public AccountRepository(HomeBankingContext repositoryContext) : base(repositoryContext)
@@ -40,11 +40,11 @@ namespace Clase_1.Repositories
 
         public IEnumerable<Account> GetAccountsByClient(long clientId)
         {
-            return FindByCondition(account=>account.ClientId == clientId)
+            return FindByCondition(account => account.ClientId == clientId)
                 .Include(account => account.Transactions)
                 .ToList();
         }
 
-        
+
     }
 }

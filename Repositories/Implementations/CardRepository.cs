@@ -1,7 +1,7 @@
 ﻿using Clase_1.Models;
 using HomeBankingMindHub.Models;
 
-namespace Clase_1.Repositories
+namespace Clase_1.Repositories.Implementations
 {
     public class CardRepository : RepositoryBase<Card>, ICardRepository
     {
@@ -30,7 +30,7 @@ namespace Clase_1.Repositories
             return FindByCondition(card => card.ClientId == clientId)
                 .ToList();
         }
-        
+
         public IEnumerable<Card> GetDebitCards(long clientId)
         {
             var cards = GetCardsByClient(clientId);
@@ -38,7 +38,7 @@ namespace Clase_1.Repositories
 
             foreach (var item in cards)
             {
-                if(item.Type == "DEBIT")
+                if (item.Type == "DEBIT")
                 {
                     debitCards.Add(item);
                 }

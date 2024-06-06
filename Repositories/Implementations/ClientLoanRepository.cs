@@ -1,7 +1,7 @@
 ﻿using Clase_1.Models;
 using HomeBankingMindHub.Models;
 
-namespace Clase_1.Repositories
+namespace Clase_1.Repositories.Implementations
 {
     public class ClientLoanRepository : RepositoryBase<ClientLoan>, IClientLoanRepository
     {

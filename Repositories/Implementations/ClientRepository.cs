@@ -1,7 +1,7 @@
 ﻿using HomeBankingMindHub.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Clase_1.Repositories
+namespace Clase_1.Repositories.Implementations
 {
     public class ClientRepository : RepositoryBase<Client>, IClientRepository
     {
@@ -34,7 +34,7 @@ namespace Clase_1.Repositories
             Create(client);
             SaveChanges();
         }
-        
+
         public Client GetClientByEmail(string email)
         {
             return FindByCondition(client => client.Email.ToUpper() == email.ToUpper())
@@ -44,7 +44,7 @@ namespace Clase_1.Repositories
                     .Include(client => client.Cards)
                     .FirstOrDefault();
         }
-        
+
     }
 }
 

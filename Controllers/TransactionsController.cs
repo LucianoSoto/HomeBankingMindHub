@@ -1,7 +1,10 @@
 ﻿using Clase_1.DTOS;
 using Clase_1.Repositories;
+using Clase_1.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Clase_1.Controllers
 {
@@ -9,11 +12,11 @@ namespace Clase_1.Controllers
     [ApiController]
     public class TransactionsController : ControllerBase
     {
-        private readonly ITransactionRepository _transactionRepository;
+        private readonly TransferServices _transferService;
 
-        public TransactionsController(ITransactionRepository transactionRepository)
+        public TransactionsController(TransferServices transferService)
         {
-            _transactionRepository = transactionRepository;
+            _transferService = transferService;
         }
 
         [HttpGet]
@@ -22,9 +25,7 @@ namespace Clase_1.Controllers
         {
             try
             {
-                var transaction = _transactionRepository.GetAllTransactions();
-                var transactionDTO = transaction.Select(transaction => new TransactionDTO(transaction)).ToList();
-                return Ok(transactionDTO);
+                return Ok(_transferService.GetAllTransactions());
             }
             catch (Exception ex)
             {
@@ -38,15 +39,26 @@ namespace Clase_1.Controllers
         {
             try
             {
-                var transaction = _transactionRepository.GetTransactionById(id);
-                if (transaction == null)
-                {
-                    return NotFound();
-                }
-                var transactionDTO = new TransactionDTO(transaction);
-                return Ok(transaction);
+                return Ok(_transferService.GetTransactionById(id));
             }
 
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ClientOnly")]
+
+        public IActionResult createTransaction([FromBody]TransferDTO transferDTO)
+        {
+            try
+            {
+                _transferService.CreateTransaction(User, transferDTO);
+                return Ok();
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);

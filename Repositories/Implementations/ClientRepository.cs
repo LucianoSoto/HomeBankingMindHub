@@ -1,4 +1,5 @@
-﻿using HomeBankingMindHub.Models;
+﻿using Clase_1.Models;
+using HomeBankingMindHub.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clase_1.Repositories.Implementations
@@ -38,6 +39,16 @@ namespace Clase_1.Repositories.Implementations
         public Client GetClientByEmail(string email)
         {
             return FindByCondition(client => client.Email.ToUpper() == email.ToUpper())
+                    .Include(client => client.Accounts)
+                    .Include(client => client.Loans)
+                        .ThenInclude(cl => cl.Loan)
+                    .Include(client => client.Cards)
+                    .FirstOrDefault();
+        }
+
+        public Client GetClientByAccount(Account account)
+        {
+            return FindByCondition(client => client.Accounts == account)
                     .Include(client => client.Accounts)
                     .Include(client => client.Loans)
                         .ThenInclude(cl => cl.Loan)

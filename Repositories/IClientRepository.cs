@@ -1,4 +1,5 @@
-﻿using HomeBankingMindHub.Models;
+﻿using Clase_1.Models;
+using HomeBankingMindHub.Models;
 
 namespace Clase_1.Repositories
 {
@@ -11,5 +12,6 @@ namespace Clase_1.Repositories
         Client GetClientById(long id);
 
         Client GetClientByEmail(string email);
+        Client GetClientByAccount(Account account);
     }
 }

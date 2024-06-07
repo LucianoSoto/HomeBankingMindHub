@@ -97,7 +97,7 @@ namespace Clase_1.Services
 
         public void CheckCards(NewCardDTO newCardDTO, long id)
         {
-            var cardsByType = newCardDTO.Type == "DEBIT" ? _cardRepository.GetDebitCards(id) : _cardRepository.GetDebitCards(id);
+            var cardsByType = newCardDTO.Type == "DEBIT" ? _cardRepository.GetDebitCards(id) : _cardRepository.GetCreditCards(id);
             if (cardsByType.Count() >= 3)
             {
                 throw new Exception("No pueden haber mas de 3 cartas por tipo");

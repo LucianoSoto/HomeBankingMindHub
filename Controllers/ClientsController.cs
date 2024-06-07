@@ -23,7 +23,7 @@ namespace HomeBankingMindHub.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly ClientServices _clientService;
-        //ctor es un atajo para crear constructores
+        
         public ClientsController(ClientServices clientService)
         {
             _clientService = clientService;

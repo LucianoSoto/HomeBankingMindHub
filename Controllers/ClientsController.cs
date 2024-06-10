@@ -1,7 +1,7 @@
 ﻿using Clase_1.DTOS;
 using Clase_1.Models;
 using Clase_1.Repositories;
-using Clase_1.Services;
+using Clase_1.Services.Implementations;
 using HomeBankingMindHub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +23,7 @@ namespace HomeBankingMindHub.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly ClientServices _clientService;
-        //ctor es un atajo para crear constructores
+        
         public ClientsController(ClientServices clientService)
         {
             _clientService = clientService;

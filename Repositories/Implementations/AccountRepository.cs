@@ -1,6 +1,7 @@
 ﻿using Clase_1.Models;
 using HomeBankingMindHub.Models;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 namespace Clase_1.Repositories.Implementations
 {
@@ -27,15 +28,23 @@ namespace Clase_1.Repositories.Implementations
 
         public Account GetAccountByNumber(string Number)
         {
-            return FindByCondition(account => account.Number == Number)
+            return FindByCondition(account => account.Number.ToUpper() == Number.ToUpper())
                 .Include(account => account.Transactions)
                 .FirstOrDefault();
         }
 
         public void Save(Account account)
         {
-            Create(account);
+            if (account.Id == 0)
+            {
+                Create(account);
+            }
+            else
+            {
+                Update(account);
+            }
             SaveChanges();
+            RepositoryContext.ChangeTracker.Clear();
         }
 
         public IEnumerable<Account> GetAccountsByClient(long clientId)

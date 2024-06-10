@@ -43,6 +43,18 @@
                                 Cards
                             </a>
                         </li>
+                        <li>
+                            <a href="/transfers.html" class="nav-link link-dark">
+                                <i class="bi bi-box-arrow-right"></i>
+                                Transfers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/loan-application.html" class="nav-link link-dark">
+                                <i class="bi bi-cash"></i>
+                                Loans
+                            </a>
+                        </li>
                     </ul>
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
@@ -76,7 +88,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="transaction in accountInfo.transactions"
-                                    v-bind:class="[ transaction.type == 'CREDIT' ? 'credit-transaction' : 'debit-transaction' ]">
+                                    v-bind:class="[ transaction.type == 0 ? 'credit-transaction' : 'debit-transaction' ]">
                                     <td>{{ transaction.id }}</td>
                                     <td>{{ transaction.description }}</td>
                                     <td>{{ formatDate(transaction.date) }}</td>

@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace Clase_1.Services
+namespace Clase_1.Services.Implementations
 {
-    public class ClientServices : ControllerBase
+    public class ClientServices : ControllerBase, IClientServices
     {
         private readonly IClientRepository _clientRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly ICardRepository _cardRepository;
 
-        public ClientServices (IClientRepository clientRepository, IAccountRepository accountRepository, ICardRepository cardRepository)
+        public ClientServices(IClientRepository clientRepository, IAccountRepository accountRepository, ICardRepository cardRepository)
         {
             _clientRepository = clientRepository;
             _accountRepository = accountRepository;
@@ -128,11 +128,11 @@ namespace Clase_1.Services
                 for (int i = 0; i < 3; i++)
                 {
                     cardNumber = RandomNumberGenerator.GetInt32(0000, 9999);
-                    cardCode += (cardNumber).ToString("D4") + "-";
+                    cardCode += cardNumber.ToString("D4") + "-";
                 }
 
                 cardNumber = RandomNumberGenerator.GetInt32(0000, 9999);
-                cardCode += (cardNumber).ToString("D4");
+                cardCode += cardNumber.ToString("D4");
 
                 Card card = _cardRepository.GetCardByNumber(cardCode);
                 if (card == null)
@@ -176,10 +176,10 @@ namespace Clase_1.Services
 
         public void CreateClient(ClaimsPrincipal User, Client client)
         {
-            if (String.IsNullOrEmpty(client.Email) ||
-                   String.IsNullOrEmpty(client.Password) ||
-                   String.IsNullOrEmpty(client.FirstName) ||
-                   String.IsNullOrEmpty(client.LastName))
+            if (string.IsNullOrEmpty(client.Email) ||
+                   string.IsNullOrEmpty(client.Password) ||
+                   string.IsNullOrEmpty(client.FirstName) ||
+                   string.IsNullOrEmpty(client.LastName))
             {
                 throw new Exception("Rellena todos los campos");
             }

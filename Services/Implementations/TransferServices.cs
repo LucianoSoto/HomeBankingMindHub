@@ -4,9 +4,9 @@ using Clase_1.Repositories;
 using HomeBankingMindHub.Models;
 using System.Security.Claims;
 
-namespace Clase_1.Services
+namespace Clase_1.Services.Implementations
 {
-    public class TransferServices
+    public class TransferServices : ITransferServices
     {
         public IAccountRepository _accountRepository { get; set; }
         public IClientRepository _clientRepository { get; set; }
@@ -40,7 +40,7 @@ namespace Clase_1.Services
 
         public void CheckIfEmpty(TransferDTO transfer)
         {
-            if (transfer.Amount == 0 || String.IsNullOrEmpty(transfer.Description) || String.IsNullOrEmpty(transfer.ToAccountNumber) || String.IsNullOrEmpty(transfer.FromAccountNumber))
+            if (transfer.Amount == 0 || string.IsNullOrEmpty(transfer.Description) || string.IsNullOrEmpty(transfer.ToAccountNumber) || string.IsNullOrEmpty(transfer.FromAccountNumber))
             {
                 throw new Exception("Por favor rellenar todos los campos");
             }
@@ -48,7 +48,7 @@ namespace Clase_1.Services
 
         public void CheckIfEqual(TransferDTO transfer)
         {
-            if (String.Equals(transfer.FromAccountNumber, transfer.ToAccountNumber))
+            if (string.Equals(transfer.FromAccountNumber, transfer.ToAccountNumber))
             {
                 throw new Exception("No podes transferirte a vos mismo"); //(boludo)
             }
@@ -79,7 +79,7 @@ namespace Clase_1.Services
 
             foreach (var account in currentUserAccounts)
             {
-                if (String.Equals(account.Number.ToUpper(), transferDTO.FromAccountNumber.ToUpper()))
+                if (string.Equals(account.Number.ToUpper(), transferDTO.FromAccountNumber.ToUpper()))
                 {
                     flag = 1;
                     clientAccount = account;
@@ -120,7 +120,7 @@ namespace Clase_1.Services
 
                 Transaction fromTransaction = new Transaction
                 {
-                    Type = TransactionType.DEBIT,
+                    Type = TransactionType.CREDIT,
                     Amount = transfer.Amount,
                     Description = transfer.Description,
                     Date = DateTime.Now,
@@ -129,7 +129,7 @@ namespace Clase_1.Services
 
                 Transaction toTransaction = new Transaction
                 {
-                    Type = TransactionType.CREDIT,
+                    Type = TransactionType.DEBIT,
                     Amount = transfer.Amount,
                     Description = transfer.Description,
                     Date = DateTime.Now,
@@ -144,25 +144,6 @@ namespace Clase_1.Services
                 Account toAccount = _accountRepository.GetAccountByNumber(transfer.ToAccountNumber);
                 toAccount.Balance = fromAccountNewBalance;
 
-                /*
-                var fromClient = _clientRepository.GetClientByAccount(fromAccount);
-                var toClient = _clientRepository.GetClientByAccount(toAccount);
-
-                Account fromAccountUpdate = new Account
-                {
-                    Number = transfer.FromAccountNumber,
-                    Balance = fromAccountNewBalance,
-                    ClientId = fromClient.Id,
-                };
-
-                Account toAccountUpdate = new Account
-                {
-                    Number = transfer.ToAccountNumber,
-                    Balance = toAccountNewBalance,
-                    ClientId = toClient.Id,
-                };
-                */
-
                 _transactionRepository.Save(toTransaction);
                 _transactionRepository.Save(fromTransaction);
 
@@ -174,6 +155,6 @@ namespace Clase_1.Services
                 throw new Exception(ex.Message);
             }
         }
-            
+
     }
 }

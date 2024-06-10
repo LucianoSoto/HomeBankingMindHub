@@ -24,6 +24,9 @@ namespace Clase_1.DTOS
             Payments = clientLoan.Payments;
 
         }
+        public ClientLoanDTO()
+        {
+        }
 
     }
 }

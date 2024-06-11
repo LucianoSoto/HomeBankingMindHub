@@ -3,6 +3,7 @@ using Clase_1.Models;
 using Clase_1.Repositories;
 using HomeBankingMindHub.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
@@ -98,6 +99,11 @@ namespace Clase_1.Services.Implementations
         public void CheckCards(NewCardDTO newCardDTO, long id)
         {
             var cardsByType = newCardDTO.Type == "DEBIT" ? _cardRepository.GetDebitCards(id) : _cardRepository.GetCreditCards(id);
+            if(newCardDTO.Type == null || newCardDTO.Color == null)
+            {
+                throw new Exception("Por favor rellenar todos los datos");
+            }
+
             if (cardsByType.Count() >= 3)
             {
                 throw new Exception("No pueden haber mas de 3 cartas por tipo");

@@ -108,9 +108,9 @@ namespace Clase_1.Services.Implementations
             try
             {
                 CheckIfEmpty(transfer);
-                CheckIfEqual(transfer);
                 CheckIfExists(transfer);
                 CheckClientAccount(User, transfer);
+                CheckIfEqual(transfer);
                 CheckBalance(User, transfer);
 
 
@@ -120,7 +120,7 @@ namespace Clase_1.Services.Implementations
 
                 Transaction fromTransaction = new Transaction
                 {
-                    Type = TransactionType.CREDIT,
+                    Type = TransactionType.DEBIT,
                     Amount = transfer.Amount,
                     Description = transfer.Description,
                     Date = DateTime.Now,
@@ -129,7 +129,7 @@ namespace Clase_1.Services.Implementations
 
                 Transaction toTransaction = new Transaction
                 {
-                    Type = TransactionType.DEBIT,
+                    Type = TransactionType.CREDIT,
                     Amount = transfer.Amount,
                     Description = transfer.Description,
                     Date = DateTime.Now,
@@ -140,9 +140,9 @@ namespace Clase_1.Services.Implementations
                 var toAccountNewBalance = _accountRepository.GetAccountByNumber(transfer.ToAccountNumber).Balance + transfer.Amount;
 
                 Account fromAccount = _accountRepository.GetAccountByNumber(transfer.FromAccountNumber);
-                fromAccount.Balance = toAccountNewBalance;
+                fromAccount.Balance = fromAccountNewBalance;
                 Account toAccount = _accountRepository.GetAccountByNumber(transfer.ToAccountNumber);
-                toAccount.Balance = fromAccountNewBalance;
+                toAccount.Balance = toAccountNewBalance;
 
                 _transactionRepository.Save(toTransaction);
                 _transactionRepository.Save(fromTransaction);

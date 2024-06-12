@@ -3,13 +3,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System;
 using HomeBankingMindHub.Models;
 using Clase_1.DTOS;
+using Clase_1.Services.Implementations;
+using System.Security.Claims;
 
 namespace Clase_1.Controllers
 {
@@ -18,36 +15,23 @@ namespace Clase_1.Controllers
     public class AuthController : ControllerBase
     {
         private IClientRepository _clientRepository;
+        private ClientServices _clientService;
+        private UserServices _userService;
 
-        public AuthController(IClientRepository clientRepository)
+        public AuthController(IClientRepository clientRepository, ClientServices clientService, UserServices userService)
         {
             _clientRepository = clientRepository;
+            _clientService = clientService;
+            _userService = userService;
         }
-        
+
         [HttpPost("login")]
 
         public async Task<IActionResult> Login([FromBody] ClientUserDTO client)
         {
             try
             {
-                Client user = _clientRepository.GetClientByEmail(client.Email);
-                 
-                if (user == null || !String.Equals(user.Password, client.Password))
-                {
-                    return Unauthorized();
-                }
-
-                var claims = new List<Claim>
-                {
-                    new Claim("Client", user.Email)
-                };
-                if (client.Email.Equals("lusoto@gmail.com"))
-                {
-                    claims.Add(new Claim("Admin", "true"));
-           
-                }
-                
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = _userService.Login(client);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 

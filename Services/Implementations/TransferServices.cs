@@ -108,9 +108,9 @@ namespace Clase_1.Services.Implementations
             try
             {
                 CheckIfEmpty(transfer);
-                CheckIfEqual(transfer);
                 CheckIfExists(transfer);
                 CheckClientAccount(User, transfer);
+                CheckIfEqual(transfer);
                 CheckBalance(User, transfer);
 
 

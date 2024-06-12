@@ -1,12 +1,22 @@
+using Clase_1.Configuration;
 using Clase_1.Repositories;
 using Clase_1.Repositories.Implementations;
 using Clase_1.Services.Implementations;
 using HomeBankingMindHub.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+/*
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+*/
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,18 +35,41 @@ builder.Services.AddScoped<IClientLoanRepository, ClientLoanRepository>();
 builder.Services.AddScoped<ClientServices>();
 builder.Services.AddScoped<TransferServices>();
 builder.Services.AddScoped<LoanServices>();
+builder.Services.AddScoped<UserServices>();
 
+/*
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+    };
+});
+*/
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
-      {
-          options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-          options.LoginPath = new PathString("/index.html");
-      });
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+    options.LoginPath = new PathString("/index.html");
+});
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));   
-    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));   
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Role","Admin"));   
 });
 
 var app = builder.Build();
@@ -77,7 +110,6 @@ app.UseStaticFiles();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
 
 app.UseRouting();
 

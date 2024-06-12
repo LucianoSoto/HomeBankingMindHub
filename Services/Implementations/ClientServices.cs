@@ -1,11 +1,15 @@
-﻿using Clase_1.DTOS;
+﻿using BCrypt.Net;
+using Clase_1.DTOS;
 using Clase_1.Models;
 using Clase_1.Repositories;
 using HomeBankingMindHub.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Clase_1.Services.Implementations
 {
@@ -43,7 +47,6 @@ namespace Clase_1.Services.Implementations
         {
             string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
 
-
             if (email == string.Empty)
             {
                 throw new Exception("Not Found!");
@@ -59,10 +62,9 @@ namespace Clase_1.Services.Implementations
             ClientDTO clientDTO = new ClientDTO(client);
 
             return clientDTO;
-
         }
 
-        public void CreateAccount(ClaimsPrincipal User)
+        public void CheckAccounts(ClaimsPrincipal User)
         {
             var client = GetCurrent(User);
             var userAccounts = _accountRepository.GetAccountsByClient(client.Id);
@@ -71,7 +73,10 @@ namespace Clase_1.Services.Implementations
             {
                 throw new Exception("No pueden haber mas de 3 cuentas por cliente");
             }
+        }
 
+        public string GenerateAccountNumber()
+        {
             string codeAccount = "";
             int flag = 0;
 
@@ -84,6 +89,16 @@ namespace Clase_1.Services.Implementations
                     flag = 1;
                 }
             } while (flag == 0);
+
+            return codeAccount;
+        }
+
+        public void CreateAccount(ClaimsPrincipal User)
+        {
+            CheckAccounts(User);
+            var client = GetCurrent(User);
+            string codeAccount = GenerateAccountNumber();
+
 
             Account newAccount = new Account
             {
@@ -118,13 +133,8 @@ namespace Clase_1.Services.Implementations
             }
         }
 
-        public void CreateCard(ClaimsPrincipal User, NewCardDTO newCardDTO)
+        public string CreateCardNumber()
         {
-            var client = GetCurrent(User);
-            var userCards = _cardRepository.GetCardsByClient(client.Id);
-
-            CheckCards(newCardDTO, client.Id);
-
             string cardCode = "";
             long cardNumber = 0;
             int flag = 0;
@@ -147,6 +157,17 @@ namespace Clase_1.Services.Implementations
                 }
             } while (flag == 0);
 
+            return cardCode;
+        }
+
+        public void CreateCard(ClaimsPrincipal User, NewCardDTO newCardDTO)
+        {
+
+            var client = GetCurrent(User);
+            CheckCards(newCardDTO, client.Id);
+
+            var userCards = _cardRepository.GetCardsByClient(client.Id);
+            var cardCode = CreateCardNumber();
             int cvv = RandomNumberGenerator.GetInt32(0, 999);
 
             Card newCard = new Card()
@@ -180,7 +201,7 @@ namespace Clase_1.Services.Implementations
             return cardsDTO;
         }
 
-        public void CreateClient(ClaimsPrincipal User, Client client)
+        public void CheckClientInfo(Client client)
         {
             if (string.IsNullOrEmpty(client.Email) ||
                    string.IsNullOrEmpty(client.Password) ||
@@ -189,7 +210,10 @@ namespace Clase_1.Services.Implementations
             {
                 throw new Exception("Rellena todos los campos");
             }
+        }
 
+        public Client CheckEmail(Client client)
+        {
             Client user = _clientRepository.GetClientByEmail(client.Email);
 
             if (user != null)
@@ -197,10 +221,19 @@ namespace Clase_1.Services.Implementations
                 throw new Exception("Email ya en uso");
             }
 
+            return user;
+        }
+
+        public void CreateClient(ClaimsPrincipal User, Client client)
+        {
+            CheckClientInfo(client);
+            CheckEmail(client);
+            string password = BCrypt.Net.BCrypt.EnhancedHashPassword(client.Password, 13);
+
             Client newClient = new Client
             {
                 Email = client.Email,
-                Password = client.Password,
+                Password = password,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
             };

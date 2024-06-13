@@ -36,6 +36,16 @@ namespace Clase_1.Repositories.Implementations
             SaveChanges();
         }
 
+        public IEnumerable<Client> GetNewClients()
+        {
+            return FindByCondition(client => client.Accounts.Count == 1)
+                .Include(client => client.Accounts)
+                .Include(client => client.Loans)
+                    .ThenInclude(cl => cl.Loan)
+                .Include(client => client.Cards)
+                .ToList();
+        }
+
         public Client GetClientByEmail(string email)
         {
             return FindByCondition(client => client.Email.ToUpper() == email.ToUpper())

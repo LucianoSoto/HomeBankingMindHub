@@ -1,6 +1,7 @@
 using Clase_1.Configuration;
 using Clase_1.Repositories;
 using Clase_1.Repositories.Implementations;
+using Clase_1.Services;
 using Clase_1.Services.Implementations;
 using HomeBankingMindHub.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -32,10 +33,12 @@ builder.Services.AddScoped<IClientLoanRepository, ClientLoanRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IClientLoanRepository, ClientLoanRepository>();
-builder.Services.AddScoped<ClientServices>();
-builder.Services.AddScoped<TransferServices>();
-builder.Services.AddScoped<LoanServices>();
-builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<IClientServices , ClientServices>();
+builder.Services.AddScoped<ITransferServices, TransferServices>();
+builder.Services.AddScoped<ILoanServices, LoanServices>();
+builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IAccountServices, AccountServices>();
+builder.Services.AddScoped<ICardServices, CardServices>();
 
 /*
 builder.Services.AddAuthentication(options =>

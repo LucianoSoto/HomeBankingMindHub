@@ -7,6 +7,7 @@ using HomeBankingMindHub.Models;
 using Clase_1.DTOS;
 using Clase_1.Services.Implementations;
 using System.Security.Claims;
+using Clase_1.Services;
 
 namespace Clase_1.Controllers
 {
@@ -15,10 +16,10 @@ namespace Clase_1.Controllers
     public class AuthController : ControllerBase
     {
         private IClientRepository _clientRepository;
-        private ClientServices _clientService;
-        private UserServices _userService;
+        private IClientServices _clientService;
+        private IUserServices _userService;
 
-        public AuthController(IClientRepository clientRepository, ClientServices clientService, UserServices userService)
+        public AuthController(IClientRepository clientRepository, IClientServices clientService, IUserServices userService)
         {
             _clientRepository = clientRepository;
             _clientService = clientService;

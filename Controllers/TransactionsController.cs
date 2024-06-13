@@ -1,5 +1,6 @@
 ﻿using Clase_1.DTOS;
 using Clase_1.Repositories;
+using Clase_1.Services;
 using Clase_1.Services.Implementations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,9 +13,9 @@ namespace Clase_1.Controllers
     [ApiController]
     public class TransactionsController : ControllerBase
     {
-        private readonly TransferServices _transferService;
+        private readonly ITransferServices _transferService;
 
-        public TransactionsController(TransferServices transferService)
+        public TransactionsController(ITransferServices transferService)
         {
             _transferService = transferService;
         }

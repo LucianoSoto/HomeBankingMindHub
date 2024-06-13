@@ -1,5 +1,7 @@
 ﻿using Clase_1.DTOS;
 using Clase_1.Repositories;
+using Clase_1.Services;
+using Clase_1.Services.Implementations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +11,11 @@ namespace Clase_1.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountServices _accountServices;
 
-        public AccountsController(IAccountRepository accountRepository)
+        public AccountsController(IAccountServices accountServices)
         {
-            _accountRepository = accountRepository;
+            _accountServices = accountServices;
         }
 
         [HttpGet]
@@ -22,9 +24,7 @@ namespace Clase_1.Controllers
         {
             try
             {
-                var accounts = _accountRepository.GetAllAccounts();
-                var accountsDTO = accounts.Select(accounts => new AccountDTO(accounts)).ToList();
-                return Ok(accountsDTO);
+                return Ok(_accountServices.GetAllAccounts());
             }
             catch (Exception ex)
             {
@@ -38,13 +38,7 @@ namespace Clase_1.Controllers
         {
             try
             {
-                var account = _accountRepository.GetAccountById(id);
-                if (account == null)
-                {
-                    return NotFound();
-                }
-                var accountDTO = new AccountDTO(account);
-                return Ok(accountDTO);
+                return Ok(_accountServices.GetAccountById(id));
             }
 
             catch (Exception ex)

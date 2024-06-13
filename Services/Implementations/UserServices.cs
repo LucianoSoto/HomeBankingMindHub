@@ -14,16 +14,16 @@ using System.Text;
 
 namespace Clase_1.Services.Implementations
 {
-    public class UserServices
+    public class UserServices : IUserServices
     {
 
-        private readonly ClientServices _clientServices;
+        private readonly IClientServices _clientServices;
         private readonly IClientRepository _clientRepository;
         private readonly IConfiguration _config;
         private readonly JwtSettings _jwtSettings;
 
 
-        public UserServices(ClientServices clientServices, IClientRepository clientRepository, IConfiguration config, IOptions<JwtSettings> jwtSettings)
+        public UserServices(IClientServices clientServices, IClientRepository clientRepository, IConfiguration config, IOptions<JwtSettings> jwtSettings)
         {
             _clientServices = clientServices;
             _clientRepository = clientRepository;
@@ -91,13 +91,11 @@ namespace Clase_1.Services.Implementations
                 };
             if (client.Email.Equals("lusoto@gmail.com"))
             {
-                claims.Add(new Claim("Admin", "true"));
+                claims.Add(new Claim("Role", "Admin"));
 
             }
 
             return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         }
-
-        //La cantidad de iteraciones proporcionadas como parametro a BCrypt permite enlentecer ataques de fuerza bruta
     }
 }

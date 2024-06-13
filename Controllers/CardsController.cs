@@ -1,5 +1,7 @@
 ﻿using Clase_1.DTOS;
 using Clase_1.Repositories;
+using Clase_1.Services;
+using Clase_1.Services.Implementations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,12 @@ namespace Clase_1.Controllers
     public class CardsController : ControllerBase
     {
         private readonly ICardRepository _cardRepository;
+        private readonly ICardServices _cardServices;
 
-        public CardsController(ICardRepository cardRepository)
+        public CardsController(ICardRepository cardRepository, ICardServices cardServices)
         {
             _cardRepository = cardRepository;
+            _cardServices = cardServices;
         }
 
         [HttpGet]
@@ -22,9 +26,7 @@ namespace Clase_1.Controllers
         {
             try
             {
-                var cards = _cardRepository.GetAllCards();
-                var cardsDTO = cards.Select(cards => new CardDTO(cards)).ToList();
-                return Ok(cards);
+                return Ok(_cardServices.GetAllCards());
             }
             catch (Exception ex)
             {
@@ -38,13 +40,7 @@ namespace Clase_1.Controllers
         {
             try
             {
-                var card = _cardRepository.GetCardById(id);
-                if (card == null)
-                {
-                    return NotFound();
-                }
-                var cardDTO = new CardDTO(card);
-                return Ok(cardDTO);
+                return Ok(_cardServices.GetCardById(id));
             }
 
             catch (Exception ex)

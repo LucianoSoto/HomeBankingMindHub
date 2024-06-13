@@ -11,9 +11,9 @@ namespace Clase_1.Controllers
     [ApiController]
     public class LoansController : ControllerBase
     {
-        private readonly LoanServices _loanService;
+        private readonly ILoanServices _loanService;
 
-        public LoansController(LoanServices loanService)
+        public LoansController(ILoanServices loanService)
         {
             _loanService = loanService;
         }

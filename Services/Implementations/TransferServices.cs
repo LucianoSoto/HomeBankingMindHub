@@ -12,9 +12,9 @@ namespace Clase_1.Services.Implementations
         public IClientRepository _clientRepository { get; set; }
         public ITransactionRepository _transactionRepository { get; set; }
 
-        public ClientServices _clientService { get; set; }
+        public IClientServices _clientService { get; set; }
 
-        public TransferServices(IAccountRepository accountRepository, IClientRepository clientRepository, ITransactionRepository transactionRepository, ClientServices clientService)
+        public TransferServices(IAccountRepository accountRepository, IClientRepository clientRepository, ITransactionRepository transactionRepository, IClientServices clientService)
         {
             _accountRepository = accountRepository;
             _clientRepository = clientRepository;

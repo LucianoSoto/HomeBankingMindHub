@@ -7,16 +7,16 @@ using static Azure.Core.HttpHeader;
 
 namespace Clase_1.Services.Implementations
 {
-    public class LoanServices
+    public class LoanServices : ILoanServices
     {
         private readonly IClientRepository _clientRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IClientLoanRepository _clientLoanRepository;
         private readonly ILoanRepository _loanRepository;
         private readonly ITransactionRepository _transactionRepository;
-        private readonly ClientServices _clientService;
+        private readonly IClientServices _clientService;
 
-        public LoanServices(IClientRepository clientRepository, IAccountRepository accountRepository, IClientLoanRepository clientLoanRepository, ILoanRepository loanRepository, ITransactionRepository transactionRepository, ClientServices clientService)
+        public LoanServices(IClientRepository clientRepository, IAccountRepository accountRepository, IClientLoanRepository clientLoanRepository, ILoanRepository loanRepository, ITransactionRepository transactionRepository, IClientServices clientService)
         {
             _clientRepository = clientRepository;
             _accountRepository = accountRepository;
@@ -152,16 +152,3 @@ namespace Clase_1.Services.Implementations
         }
     }
 }
-
-/*
-Debe recibir un objeto de solicitud de crédito con los datos del préstamo
->>Verificar que los datos sean correctos, es decir no estén vacíos, que el monto no sea 0 o que las cuotas no sean 0.
->>Verificar que el préstamo exista
->>Verificar que el monto solicitado no exceda el monto máximo del préstamo
->>Verifica que la cantidad de cuotas se encuentre entre las disponibles del préstamo
->>Verificar que la cuenta de destino exista
->>Verificar que la cuenta de destino pertenezca al cliente autenticado
->>Se debe crear una solicitud de préstamo con el monto solicitado sumando el 20% del mismo
->>Se debe crear una transacción “CREDIT” asociada a la cuenta de destino (el monto debe quedar positivo) con la descripción concatenando el nombre del préstamo y la frase “loan approved”
->>Se debe actualizar la cuenta de destino sumando el monto solicitado.
-*/

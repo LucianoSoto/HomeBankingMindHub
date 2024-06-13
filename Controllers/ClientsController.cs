@@ -1,6 +1,7 @@
 ﻿using Clase_1.DTOS;
 using Clase_1.Models;
 using Clase_1.Repositories;
+using Clase_1.Services;
 using Clase_1.Services.Implementations;
 using HomeBankingMindHub.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +23,15 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly ClientServices _clientService;
-        
-        public ClientsController(ClientServices clientService)
+        private readonly IClientServices _clientService;
+        private readonly IAccountServices _accountService;
+        private readonly ICardServices _cardService;
+
+        public ClientsController(IClientServices clientService,IAccountServices accountService, ICardServices cardService)
         {
             _clientService = clientService;
+            _accountService = accountService;
+            _cardService = cardService;
         }
 
         [HttpGet]
@@ -83,7 +88,7 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
-                _clientService.CreateAccount(User);
+                _accountService.CreateAccount(User);
                 return Ok(); ;
             }
             catch(Exception ex) 
@@ -101,7 +106,7 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
-                _clientService.CreateCard(User, newCardDTO);
+                _cardService.CreateCard(User, newCardDTO);
                 return Ok();
             }
             catch (Exception ex)

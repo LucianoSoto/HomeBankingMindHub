@@ -19,6 +19,13 @@ namespace Clase_1.Repositories.Implementations
                 .ToList();
         }
 
+        public IEnumerable<Account> GetAllPoorAccounts()
+        {
+            return FindByCondition(account => account.Balance == 0)
+                .Include(account => account.Transactions)
+                .ToList();
+        }
+
         public Account GetAccountById(long id)
         {
             return FindByCondition(account => account.Id == id)
